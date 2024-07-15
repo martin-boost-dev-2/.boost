@@ -1,3 +1,4 @@
+# Hello
 name: boostsecurity.io
 run-name: ${{fromJSON(github.event.inputs.scan_params).run_name}}
 on:
