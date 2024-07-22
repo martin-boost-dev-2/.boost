@@ -1,5 +1,8 @@
-name: boostsecurity.io
+name: boostsecurity.io @ nope
 run-name: ${{fromJSON(github.event.inputs.scan_params).run_name}}
+
+
+
 on:
   workflow_dispatch:
     inputs:
