@@ -1,0 +1,164 @@
+name: boostsecurity.io
+run-name: ${{fromJSON(github.event.inputs.scan_params).run_name}}
+on:
+  workflow_dispatch:
+    inputs:
+      job_name:
+        description: Name of the job to run
+        required: false
+      scan_params:
+        description: The scan parameters
+        required: true
+
+jobs:
+  boost-scanner:
+    if: github.event.inputs.job_name == ''
+    name: ${{fromJSON(github.event.inputs.scan_params).scanner_name}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{fromJSON(github.event.inputs.scan_params).repository}}
+          token: ${{fromJSON(github.event.inputs.scan_params).token}}
+          ref: ${{fromJSON(github.event.inputs.scan_params).branch_name}}
+      - name: ${{fromJSON(github.event.inputs.scan_params).scanner_name}}
+        uses: boostsecurityio/boostsec-scanner-github@v4
+        with:
+          api_token: ${{ secrets.BOOST_API_TOKEN }}
+          registry_module: ${{fromJSON(github.event.inputs.scan_params).registry_module}}
+          scan_diff_timeout: ${{fromJSON(github.event.inputs.scan_params).scan_diff_timeout}}
+          scan_main_timeout: ${{fromJSON(github.event.inputs.scan_params).scan_main_timeout}}
+          scan_label: ${{fromJSON(github.event.inputs.scan_params).scan_label}}
+          scan_path: ${{fromJSON(github.event.inputs.scan_params).scan_path}}
+          api_endpoint: https://api.dev.boostsec.io
+        env:
+          BOOST_GIT_HEAD: ${{fromJSON(github.event.inputs.scan_params).head_sha}}
+          BOOST_GIT_BASE: ${{fromJSON(github.event.inputs.scan_params).base_sha}}
+          BOOST_GIT_BRANCH: ${{fromJSON(github.event.inputs.scan_params).branch_name}}
+          BOOST_GIT_MAIN_BRANCH: ${{fromJSON(github.event.inputs.scan_params).main_branch_name}}
+          BOOST_GIT_PROJECT: ${{fromJSON(github.event.inputs.scan_params).repository}}
+          BOOST_GIT_PULL_REQUEST: ${{fromJSON(github.event.inputs.scan_params).pull_request_id}}
+
+  boost-scanner-boostsecurityio-codeql:
+    if: github.event.inputs.job_name == 'boost-scanner-boostsecurityio-codeql'
+    name: ${{fromJSON(github.event.inputs.scan_params).scanner_name}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{fromJSON(github.event.inputs.scan_params).repository}}
+          token: ${{fromJSON(github.event.inputs.scan_params).token}}
+          ref: ${{fromJSON(github.event.inputs.scan_params).branch_name}}
+      - name: ${{fromJSON(github.event.inputs.scan_params).scanner_name}}
+        uses: boostsecurityio/boostsec-scanner-github@v4
+        with:
+          api_token: ${{ secrets.BOOST_API_TOKEN }}
+          registry_module: ${{fromJSON(github.event.inputs.scan_params).registry_module}}
+          scan_diff_timeout: ${{fromJSON(github.event.inputs.scan_params).scan_diff_timeout}}
+          scan_main_timeout: ${{fromJSON(github.event.inputs.scan_params).scan_main_timeout}}
+          scan_label: ${{fromJSON(github.event.inputs.scan_params).scan_label}}
+          scan_path: ${{fromJSON(github.event.inputs.scan_params).scan_path}}
+          api_endpoint: https://api.dev.boostsec.io
+        env:
+          BOOST_GIT_HEAD: ${{fromJSON(github.event.inputs.scan_params).head_sha}}
+          BOOST_GIT_BASE: ${{fromJSON(github.event.inputs.scan_params).base_sha}}
+          BOOST_GIT_BRANCH: ${{fromJSON(github.event.inputs.scan_params).branch_name}}
+          BOOST_GIT_MAIN_BRANCH: ${{fromJSON(github.event.inputs.scan_params).main_branch_name}}
+          BOOST_GIT_PROJECT: ${{fromJSON(github.event.inputs.scan_params).repository}}
+          BOOST_GIT_PULL_REQUEST: ${{fromJSON(github.event.inputs.scan_params).pull_request_id}}
+          CODEQL_LANGUAGE: ${{fromJSON(github.event.inputs.scan_params).CODEQL_LANGUAGE}}
+          CODEQL_CREATE_ARGS: ${{fromJSON(github.event.inputs.scan_params).CODEQL_CREATE_ARGS}}
+          CODEQL_ANALYZE_ARGS: ${{fromJSON(github.event.inputs.scan_params).CODEQL_ANALYZE_ARGS}}
+
+  boost-scanner-boostsecurityio-semgrep:
+    if: github.event.inputs.job_name == 'boost-scanner-boostsecurityio-semgrep'
+    name: ${{fromJSON(github.event.inputs.scan_params).scanner_name}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{fromJSON(github.event.inputs.scan_params).repository}}
+          token: ${{fromJSON(github.event.inputs.scan_params).token}}
+          ref: ${{fromJSON(github.event.inputs.scan_params).branch_name}}
+      - name: ${{fromJSON(github.event.inputs.scan_params).scanner_name}}
+        uses: boostsecurityio/boostsec-scanner-github@v4
+        with:
+          api_token: ${{ secrets.BOOST_API_TOKEN }}
+          registry_module: ${{fromJSON(github.event.inputs.scan_params).registry_module}}
+          scan_diff_timeout: ${{fromJSON(github.event.inputs.scan_params).scan_diff_timeout}}
+          scan_main_timeout: ${{fromJSON(github.event.inputs.scan_params).scan_main_timeout}}
+          scan_label: ${{fromJSON(github.event.inputs.scan_params).scan_label}}
+          scan_path: ${{fromJSON(github.event.inputs.scan_params).scan_path}}
+          api_endpoint: https://api.dev.boostsec.io
+        env:
+          BOOST_GIT_HEAD: ${{fromJSON(github.event.inputs.scan_params).head_sha}}
+          BOOST_GIT_BASE: ${{fromJSON(github.event.inputs.scan_params).base_sha}}
+          BOOST_GIT_BRANCH: ${{fromJSON(github.event.inputs.scan_params).branch_name}}
+          BOOST_GIT_MAIN_BRANCH: ${{fromJSON(github.event.inputs.scan_params).main_branch_name}}
+          BOOST_GIT_PROJECT: ${{fromJSON(github.event.inputs.scan_params).repository}}
+          BOOST_GIT_PULL_REQUEST: ${{fromJSON(github.event.inputs.scan_params).pull_request_id}}
+          SEMGREP_RULES: ${{fromJSON(github.event.inputs.scan_params).SEMGREP_RULES}}
+
+  boost-scanner-boostsecurityio-semgrep-pro:
+    if: github.event.inputs.job_name == 'boost-scanner-boostsecurityio-semgrep-pro'
+    name: ${{fromJSON(github.event.inputs.scan_params).scanner_name}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{fromJSON(github.event.inputs.scan_params).repository}}
+          token: ${{fromJSON(github.event.inputs.scan_params).token}}
+          ref: ${{fromJSON(github.event.inputs.scan_params).branch_name}}
+      - name: ${{fromJSON(github.event.inputs.scan_params).scanner_name}}
+        uses: boostsecurityio/boostsec-scanner-github@v4
+        with:
+          api_token: ${{ secrets.BOOST_API_TOKEN }}
+          registry_module: ${{fromJSON(github.event.inputs.scan_params).registry_module}}
+          scan_diff_timeout: ${{fromJSON(github.event.inputs.scan_params).scan_diff_timeout}}
+          scan_main_timeout: ${{fromJSON(github.event.inputs.scan_params).scan_main_timeout}}
+          scan_label: ${{fromJSON(github.event.inputs.scan_params).scan_label}}
+          scan_path: ${{fromJSON(github.event.inputs.scan_params).scan_path}}
+          api_endpoint: https://api.dev.boostsec.io
+        env:
+          BOOST_GIT_HEAD: ${{fromJSON(github.event.inputs.scan_params).head_sha}}
+          BOOST_GIT_BASE: ${{fromJSON(github.event.inputs.scan_params).base_sha}}
+          BOOST_GIT_BRANCH: ${{fromJSON(github.event.inputs.scan_params).branch_name}}
+          BOOST_GIT_MAIN_BRANCH: ${{fromJSON(github.event.inputs.scan_params).main_branch_name}}
+          BOOST_GIT_PROJECT: ${{fromJSON(github.event.inputs.scan_params).repository}}
+          BOOST_GIT_PULL_REQUEST: ${{fromJSON(github.event.inputs.scan_params).pull_request_id}}
+          SEMGREP_RULES: ${{fromJSON(github.event.inputs.scan_params).SEMGREP_RULES}}
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+  boost-scanner-boostsecurityio-snyk-test:
+    if: github.event.inputs.job_name == 'boost-scanner-boostsecurityio-snyk-test'
+    name: ${{fromJSON(github.event.inputs.scan_params).scanner_name}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{fromJSON(github.event.inputs.scan_params).repository}}
+          token: ${{fromJSON(github.event.inputs.scan_params).token}}
+          ref: ${{fromJSON(github.event.inputs.scan_params).branch_name}}
+      - name: ${{fromJSON(github.event.inputs.scan_params).scanner_name}}
+        uses: boostsecurityio/boostsec-scanner-github@v4
+        with:
+          api_token: ${{ secrets.BOOST_API_TOKEN }}
+          registry_module: ${{fromJSON(github.event.inputs.scan_params).registry_module}}
+          scan_diff_timeout: ${{fromJSON(github.event.inputs.scan_params).scan_diff_timeout}}
+          scan_main_timeout: ${{fromJSON(github.event.inputs.scan_params).scan_main_timeout}}
+          scan_label: ${{fromJSON(github.event.inputs.scan_params).scan_label}}
+          scan_path: ${{fromJSON(github.event.inputs.scan_params).scan_path}}
+          api_endpoint: https://api.dev.boostsec.io
+        env:
+          BOOST_GIT_HEAD: ${{fromJSON(github.event.inputs.scan_params).head_sha}}
+          BOOST_GIT_BASE: ${{fromJSON(github.event.inputs.scan_params).base_sha}}
+          BOOST_GIT_BRANCH: ${{fromJSON(github.event.inputs.scan_params).branch_name}}
+          BOOST_GIT_MAIN_BRANCH: ${{fromJSON(github.event.inputs.scan_params).main_branch_name}}
+          BOOST_GIT_PROJECT: ${{fromJSON(github.event.inputs.scan_params).repository}}
+          BOOST_GIT_PULL_REQUEST: ${{fromJSON(github.event.inputs.scan_params).pull_request_id}}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
