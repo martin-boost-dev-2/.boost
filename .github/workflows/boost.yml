@@ -1,5 +1,6 @@
 name: boostsecurity.io
 run-name: ${{fromJSON(github.event.inputs.scan_params).run_name}}
+permissions: {}
 on:
   workflow_dispatch:
     inputs:
