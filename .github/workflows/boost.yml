@@ -22,3 +22,5 @@ jobs:
           api_token: ${{secrets.BOOST_API_TOKEN}}
           trigger_id: ${{fromJSON(github.event.inputs.scan_params).trigger_id}}
           api_endpoint: https://api.dev.boostsec.io
+          log_level: TRACE
+          cli_version: 1.0.0.rc261
