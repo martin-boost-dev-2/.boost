@@ -1,0 +1,38 @@
+rules:
+  - id: no-eval
+    patterns:
+      - pattern: eval(...)
+    message: >-
+      Avoid using `eval()`. It executes arbitrary code and is a common
+      source of code injection vulnerabilities.
+    languages: [python]
+    severity: ERROR
+    metadata:
+      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code"
+      owasp: A03:2021 Injection
+
+  - id: no-hardcoded-password
+    patterns:
+      - pattern: password = "..."
+    message: >-
+      Hardcoded password detected. Use environment variables or a
+      secrets manager instead.
+    languages: [python]
+    severity: WARNING
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      owasp: A07:2021 Identification and Authentication Failures
+
+  - id: no-shell-true
+    patterns:
+      - pattern: subprocess.call(..., shell=True, ...)
+      - pattern: subprocess.run(..., shell=True, ...)
+      - pattern: subprocess.Popen(..., shell=True, ...)
+    message: >-
+      Avoid `shell=True` in subprocess calls. It can lead to shell
+      injection when combined with unsanitized input.
+    languages: [python]
+    severity: ERROR
+    metadata:
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command"
+      owasp: A03:2021 Injection
