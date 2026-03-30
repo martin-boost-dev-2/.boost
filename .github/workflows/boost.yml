@@ -24,4 +24,4 @@ jobs:
           api_endpoint: https://api.dev.boostsec.io
           log_level: 'trace'
         env:
-          BOOST_SCANNER_REGISTRY_REPO: https://github.com/boostsecurityio/dev-registry
+          BOOST_SCANNER_REGISTRY_REPO: https://github.com/boostsecurityio/dev-registry#sync-osv-scanner-filelist
